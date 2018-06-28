@@ -3,12 +3,12 @@
 const debug = require('debug')('sigfox-callback:db');
 const mongo = require('mongojs');
 const format = require('util').format;
-const dbUrl = process.env.DATABASE_URL || 'mongodb://localhost:27017/sigfox-callback';
+const dbUrl = process.env.DATABASE_URL || 'mongodb://valid-e2e-71:M2VqEdtzzam9aecq27pRm5SA0gj0Y35sjQ9HmLNexrKoLezcXLqjorLKX7zX7NLs1h5MBcuAqZgrxcZIKA7FNg==@valid-e2e-71.documents.azure.com:10255/?ssl=true';
 
 module.exports = {
   db : undefined,
   connect : function() {
-    this.db = mongo(dbUrl, ['calls']);
+    this.db = mongo(dbUrl);
     
     this.db.on('error', function(err){
       debug('DB Error - %s', err);
