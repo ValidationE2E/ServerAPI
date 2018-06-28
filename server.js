@@ -29,7 +29,7 @@ const port = process.env.PORT || 34000 || 8443 || 8883 || 9443;
 const server = http.createServer(app);
 const db = require('./modules/db');
 const requestLogger = require('./middlewares/requestLogger');
-const requestLogger = require('./middlewares/requestLoggerob');
+const requestLoggerob = require('./middlewares/requestLoggerob');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
