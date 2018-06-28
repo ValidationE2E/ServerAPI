@@ -3,7 +3,7 @@
 const debug = require('debug')('sigfox-callback:db');
 const mongo = require('mongojs');
 const format = require('util').format;
-const dbUrl = process.env.DATABASE_URL || 'mongodb://sigfox:1U9C9MK6LAL0rkJ5wYANJaSxJv00t21GTwNFw20YeAtv5sQX6lX9rCxvB3HnCn8M2pL0wC1eYDMrqbz6hibMHg==@sigfox.documents.azure.com:10255/?ssl=true';
+const dbUrl = process.env.DATABASE_URL || 'mongodb://valid-e2e-71:M2VqEdtzzam9aecq27pRm5SA0gj0Y35sjQ9HmLNexrKoLezcXLqjorLKX7zX7NLs1h5MBcuAqZgrxcZIKA7FNg==@valid-e2e-71.documents.azure.com:10255/?ssl=true';
 
 module.exports = {
   db : undefined,
