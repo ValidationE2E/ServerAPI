@@ -25,24 +25,25 @@ const http = require('http');
 const path = require('path');
 /* init */
 const app = express();
-const port = process.env.PORT || 34000 || 8443 || 8883 || 9443;
+const port = process.env.PORT || 34000;
 const server = http.createServer(app);
 const db = require('./modules/db');
 const requestLogger = require('./middlewares/requestLogger');
 const requestLoggerob = require('./middlewares/requestLoggerob');
+var jsonParser = bodyParser.json()
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.json({ type: 'application/*+json' }))
 app.locals.moment = require('moment');
 
 
 db.connect();
 server.listen(port);
 
-app.get('/sig', function(req, res){
+app.get('/', function(req, res){
   debug('Looking for logs');
   db.find('calls', {path:'/sigfox', payload:{$exists:true}}, {sort:{time:-1}})
   .then(function(data){
@@ -75,9 +76,9 @@ app.get('/sig', function(req, res){
   });
 });
 
-app.get('/objenious', function (req, res) {
+app.get('/obj/', function (req, res) {
     debug('Looking for logs');
-    dbob.find('callsob', { path: '/objenious', payload: { $exists: true } }, { sort: { time: -1 } })
+    db.find('callsob', { device_id: { $exists: true } }, { sort: { timestamp: -1 } })
         .then(function (data) {
             debug('%s items found', data.length);
             res.format({
@@ -86,7 +87,7 @@ app.get('/objenious', function (req, res) {
                     res.json({ entries: data });
                 },
                 html: function () {
-                    res.render('objenious-logs', { title: 'Objenious messages', entries: data });
+                    res.render('objenious-logs', { title: 'OBJENIOUS messages', entries: data });
                 },
                 default: function () {
                     res.status(406).send({ err: 'Invalid Accept header. This method only handles html & json' });
@@ -114,7 +115,18 @@ app.post('/sigfox', requestLogger, function(req, res){
   res.json({result:'♡'});
 });
 
-app.post('/objenious', requestLoggerob, function (req, res) {
+app.post('/objenious', jsonParser, function (req, res) {
+    db.insert('callsob', req.body)
+    .then(function (obj) {
+        debug('Request log OK');
+        debug(obj);
+        next();
+    })
+    .catch(function (err) {
+        debug('Log err : %s', err);
+        //return res.status(500).json({err:'Unable to log request', details:err.message});
+        next();
+    });
     debug('~~ POST request ~~');
     res.json({ result: '♡' });
 });

@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title><%= title %></title>
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <h1 class="page-header"><%=title%></h1>
+          <h2><%=entries.length%> messages</h2>
+            <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+				  <th>Receive at</th>
+                  <th>Device</th>
+                  <th>Latitude</th>
+                  <th>Longitude</th>
+                  <th>RSSI</th>
+                  <th>Data</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                <% entries.forEach(function(entry){%>
+                  <tr>
+                    <td><%=entry.timestamp ? moment(entry.timestamp).fromNow() : 'N/A'%></td>
+                    <td><%=entry.device_id%></td>
+                    <td><%=entry.lat%></td>
+                    <td><%=entry.lng%> dB</td>
+                    <td><%=entry.protocol_data.rssi%> dBm</td>
+                    <td><strong><%=entry.payload_cleartext%></strong></td>
+                  </tr>
+                <%})%>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
